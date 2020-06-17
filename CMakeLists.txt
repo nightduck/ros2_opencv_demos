@@ -33,6 +33,8 @@ find_package(OpenCV 4 REQUIRED
   opencv_highgui
   opencv_objdetect
   opencv_videoio
+  opencv_video
+  opencv_imgcodecs
   CONFIG
 )
 find_package(cv_bridge REQUIRED)
@@ -52,8 +54,16 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 add_executable(face_detector src/face_detector.cpp)
 ament_target_dependencies(face_detector rclcpp image_transport sensor_msgs cv_bridge)
 
+add_executable(object_tracking src/object_tracking.cpp)
+ament_target_dependencies(object_tracking rclcpp image_transport sensor_msgs cv_bridge)
+
+#add_executable(compare_images src/compare_images.cpp)
+#ament_target_dependencies(compare_images rclcpp image_transport sensor_msgs cv_bridge)
+
 install(TARGETS
         face_detector
+        #compare_images
+        object_tracking
         DESTINATION lib/${PROJECT_NAME})
 
 ament_package()
