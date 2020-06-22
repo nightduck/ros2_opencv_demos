@@ -18,6 +18,10 @@
 #include <opencv2/cudaarithm.hpp>
 #include <opencv2/cudafilters.hpp>
 
+#define likely(x)      __builtin_expect(!!(x), 1)
+#define unlikely(x)    __builtin_expect(!!(x), 0)
+
+
 struct BufferMSSIM                                     // Optimized CUDA versions
 {   // Data allocations are very expensive on CUDA. Use a buffer to solve: allocate once reuse later.
     cv::cuda::GpuMat gI1, gI2, gs, t1,t2;
@@ -125,7 +129,12 @@ private:
         }
 
         BufferMSSIM b;
-        cv::Scalar s = getMSSIM_CUDA_optimized(cv_ptr->image, prev, b);
+        cv::Scalar s;
+        if (unlikely(prev.data == NULL)) {
+            s = getMSSIM_CUDA_optimized(cv_ptr->image, cv_ptr->image, b);
+        } else {
+            s = getMSSIM_CUDA_optimized(cv_ptr->image, prev, b);
+        }
 
         std::cout << s.val[0] << ", " << s.val[1] << ", " << s.val[2] << ", " << s.val[3] << std::endl;
 
