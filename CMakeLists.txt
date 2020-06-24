@@ -19,6 +19,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 set(cv_bridge_DIR /usr/local/share/cv_bridge/cmake)
+set(OpenCV_DIR /usr/local/lib/cmake/opencv)
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
